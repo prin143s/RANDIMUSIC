@@ -29,5 +29,3 @@ unidecode
 yt-dlp==2024.05.27
 youtube-search
 youtube-search-python
-# uvloop <-- comment/remove this
-# ntgcalls <-- comment/remove this
