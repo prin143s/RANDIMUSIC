@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: randimusic
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m __main__
+    region: oregon
+    hooks:
+      postDeploy:
+        - apt-get update && apt-get install -y ffmpeg
