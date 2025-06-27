@@ -261,16 +261,10 @@ class YouTubeAPI:
             link = self.base + link
         if "&" in link:
             link = link.split("&")[0]
-        proc = await asyncio.create_subprocess_exec(
-            "yt-dlp",
-            "--cookies",cookie_txt_file(),
-            "-g",
-            "-f",
-            "best[height<=?720][width<=?1280]",
-            f"{link}",
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-        )
+        from utils.safe_subprocess import safe_exec
+
+out, err = await safe_exec(["ffmpeg", "-i", file_path, output_path])
+
         stdout, stderr = await proc.communicate()
         if stdout:
             return 1, stdout.decode().split("\n")[0]
