@@ -38,11 +38,10 @@ from ..logging import LOGGER
 def install_req(cmd: str) -> Tuple[str, str, int, int]:
     async def install_requirements():
         args = shlex.split(cmd)
-        process = await asyncio.create_subprocess_exec(
-            *args,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE,
-        )
+        from utils.safe_subprocess import safe_exec
+
+out, err = await safe_exec(["git", "rev-parse", "--is-inside-work-tree"])
+
         stdout, stderr = await process.communicate()
         return (
             stdout.decode("utf-8", "replace").strip(),
