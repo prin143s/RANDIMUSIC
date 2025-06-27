@@ -156,11 +156,10 @@ out, err = await safe_exec(["yt-dlp", "-j", url])
     return total_size
 
 async def shell_cmd(cmd):
-    proc = await asyncio.create_subprocess_shell(
-        cmd,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-    )
+    from utils.safe_subprocess import safe_shell
+
+out, err = await safe_shell(f"yt-dlp -x --audio-format mp3 {url}")
+
     out, errorz = await proc.communicate()
     if errorz:
         if "unavailable videos are hidden" in (errorz.decode("utf-8")).lower():
