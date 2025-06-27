@@ -206,20 +206,10 @@ class Call(PyTgCalls):
                     vs = 0.68
                 if str(speed) == "2.0":
                     vs = 0.5
-                proc = await asyncio.create_subprocess_shell(
-                    cmd=(
-                        "ffmpeg "
-                        "-i "
-                        f"{file_path} "
-                        "-filter:v "
-                        f"setpts={vs}*PTS "
-                        "-filter:a "
-                        f"atempo={speed} "
-                        f"{out}"
-                    ),
-                    stdin=asyncio.subprocess.PIPE,
-                    stderr=asyncio.subprocess.PIPE,
-                )
+                from utils.safe_subprocess import safe_shell
+
+out, err = await safe_shell("ffmpeg -version")
+
                 await proc.communicate()
         else:
             out = file_path
