@@ -126,14 +126,10 @@ def cookie_txt_file():
 
 async def check_file_size(link):
     async def get_format_info(link):
-        proc = await asyncio.create_subprocess_exec(
-            "yt-dlp",
-            "--cookies", cookie_txt_file(),
-            "-J",
-            link,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
+        from utils.safe_subprocess import safe_exec
+
+out, err = await safe_exec(["yt-dlp", "-j", url])
+
         stdout, stderr = await proc.communicate()
         if proc.returncode != 0:
             print(f'Error:\n{stderr.decode()}')
