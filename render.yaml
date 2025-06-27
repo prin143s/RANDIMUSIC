@@ -2,10 +2,13 @@ services:
   - type: web
     name: randimusic
     env: python
-    plan: free
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
     startCommand: python -m __main__
-    region: oregon
+    envVars:
+      - key: PIP_NO_BUILD_ISOLATION
+        value: true
+      - key: PIP_USE_FEATURE
+        value: "fast-deps"
     hooks:
       postDeploy:
-        - apt-get update && apt-get install -y ffmpeg
+        - apt-get update && apt-get install -y ffmpeg git
